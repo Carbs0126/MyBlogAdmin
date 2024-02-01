@@ -41,7 +41,6 @@ html.dark {
 }
 
 body {
-    display: flex;
     background-color: #fff;
     transition: background-color 0.2s linear;
     font-family: Geist, "JetBrains Mono", ui-sans-serif, system-ui,
@@ -125,7 +124,7 @@ body {
     width: 100vh;
 }
 .separator-line {
-    background-color: #e1e3e8;
+    background-color: #c5c5c5;
 }
 
 /* 个人信息、头像 */

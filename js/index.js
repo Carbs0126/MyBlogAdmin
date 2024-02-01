@@ -381,17 +381,6 @@ function updateAvatar() {
     document.getElementById("my-avatar-image").src = "/img/rick-avatar.png";
 }
 
-// 使用示例
-// var username = getCookie("username");
-
-/*
-if (username) {
-    console.log("Username Cookie Value: " + username);
-} else {
-    console.log("Username Cookie not found");
-}
-*/
-
 function checkAuth() {
     return new Promise((resolve, reject) => {
         let tokenInCookie = util.getCookie(TOKEN);
@@ -430,6 +419,7 @@ function setLoginPageVisibility(isVisible) {
             "login-input-password",
             "login-input-password-wrapper"
         );
+        setTogglePasswordVisibilityButtonListener();
         setLoginButtonListener();
     } else {
         loginPage.style.display = "none";
@@ -461,12 +451,40 @@ function setLoginButtonListener() {
     if (!loginButtonEle.hasAttribute("hasOnClickListener")) {
         loginButtonEle.addEventListener("click", function () {
             console.log("loginButtonEle clicked ");
-            // updateUrlPath("/writing");
-            // clearWritingContentPanel();
-            util.toast("ttt");
+            util.toast("假装登录成功");
+            setLoginPageVisibility(false);
+            setContentPageVisibility(true);
+            updateUrlPath("/content");
+            showQuillEditor();
         });
         loginButtonEle.setAttribute("hasOnClickListener", "added");
     }
+}
+
+function setTogglePasswordVisibilityButtonListener() {
+    let toggleButton = document.getElementById("login-password-toggle-div");
+    if (!toggleButton.hasAttribute("hasOnClickListener")) {
+        toggleButton.addEventListener("click", function () {
+            console.log("toggleButton clicked ");
+            let inputPassword = document.getElementById("login-input-password");
+            if (inputPassword.type === "password") {
+                inputPassword.type = "text";
+            } else {
+                inputPassword.type = "password";
+            }
+        });
+        toggleButton.setAttribute("hasOnClickListener", "added");
+    }
+}
+
+let quillEditor = null;
+
+function showQuillEditor() {
+    quillEditor = new Quill("#article-editor", {
+        theme: "snow",
+        placeholder: "在此输入文字内容...",
+        readOnly: false,
+    });
 }
 
 (function () {
@@ -475,17 +493,20 @@ function setLoginButtonListener() {
             function (result) {
                 // resolve
                 // 内容界面
-                console.log("----内容界面-----");
+                console.log("----展示内容界面-----");
                 console.log(result);
                 setLoginPageVisibility(false);
                 setContentPageVisibility(true);
+                updateUrlPath("/content");
+                showQuillEditor();
             },
             function (error) {
                 // reject
                 // 登录界面
-                console.log("----登录界面-----");
+                console.log("----展示登录界面-----");
                 setContentPageVisibility(false);
                 setLoginPageVisibility(true);
+                updateUrlPath("/login");
             }
         );
     };

@@ -3,6 +3,8 @@
     --login-elements-width-percentage: 85%;
 }
 
+/* ------------------------------- 登录 页面 --------------------------------- */
+
 #login-page {
     background-color: white;
     display: flex;
@@ -66,17 +68,23 @@
 #login-input-username {
     width: 320px;
 }
-
-#login-input-password-wrapper {
+#login-input-password-wrapper-wrapper {
+    position: relative;
     width: var(--login-elements-width-percentage);
     height: 48px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
+}
+
+#login-input-password-wrapper {
+    height: 48px;
+    position: relative;
 }
 
 #login-input-password {
-    width: 320px;
+    position: absolute;
+    left: 10px;
+    top: 3px;
+    height: 42px;
+    width: 292px;
 }
 
 .login-input {
@@ -89,12 +97,21 @@
     font: 900 16px "";
 }
 
-#login-img-password-toggle {
-    height: 42px;
-    padding-right: 12px;
-    width: 42px;
-    background-color: #326526;
-    display: inline;
+#login-password-toggle-div {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: absolute;
+    right: 6px;
+    top: 6px;
+    height: 36px;
+    width: 36px;
+    opacity: 0.6;
+    cursor: pointer;
+}
+
+#login-password-toggle-img {
+    scale: 0.8;
 }
 
 #login-button {
