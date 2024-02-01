@@ -58,7 +58,11 @@
         <div id="login-page">
             <!-- TODO 仿照github登录页面 -->
             <div id="login-card">
-                <div id="login-text-title">登录</div>
+                <div id="login-text-title">Welcome Back!</div>
+                <div id="login-text-username-hint" class="login-text-hint">
+                    Username
+                </div>
+
                 <div
                     id="login-input-username-wrapper"
                     class="login-input-wrapper-style"
@@ -67,8 +71,10 @@
                         id="login-input-username"
                         type="text"
                         class="login-input"
-                        placeholder="Username"
                     />
+                </div>
+                <div id="login-text-password-hint" class="login-text-hint">
+                    Password
                 </div>
                 <div
                     id="login-input-password-wrapper"
@@ -78,12 +84,14 @@
                         type="password"
                         id="login-input-password"
                         class="login-input"
-                        placeholder="Password"
                     />
+                    <!-- <div id="login-img-password-toggle">隐藏</div> -->
                 </div>
 
-                <div id="login-button">点击登录</div>
+                <div id="login-button">Login</div>
             </div>
+
+            <div id="content-page"></div>
         </div>
         <!--
         <div

@@ -418,7 +418,32 @@ function checkAuth() {
     });
 }
 
-function showLoginDialog() {}
+function setLoginPageVisibility(isVisible) {
+    let loginPage = document.getElementById("login-page");
+    if (isVisible) {
+        loginPage.style.display = "flex";
+        setInputUIEffect(
+            "login-input-username",
+            "login-input-username-wrapper"
+        );
+        setInputUIEffect(
+            "login-input-password",
+            "login-input-password-wrapper"
+        );
+        setLoginButtonListener();
+    } else {
+        loginPage.style.display = "none";
+    }
+}
+
+function setContentPageVisibility(isVisible) {
+    let contentPage = document.getElementById("content-page");
+    if (isVisible) {
+        contentPage.style.display = "flex";
+    } else {
+        contentPage.style.display = "none";
+    }
+}
 
 function setInputUIEffect(focusID, changeStyleID) {
     let wrapperEle = document.getElementById(changeStyleID);
@@ -446,24 +471,21 @@ function setLoginButtonListener() {
 
 (function () {
     window.onload = function () {
-        setInputUIEffect(
-            "login-input-username",
-            "login-input-username-wrapper"
-        );
-        setInputUIEffect(
-            "login-input-password",
-            "login-input-password-wrapper"
-        );
-        setLoginButtonListener();
         checkAuth().then(
             function (result) {
                 // resolve
                 // 内容界面
+                console.log("----内容界面-----");
+                console.log(result);
+                setLoginPageVisibility(false);
+                setContentPageVisibility(true);
             },
             function (error) {
                 // reject
                 // 登录界面
-                showLoginDialog();
+                console.log("----登录界面-----");
+                setContentPageVisibility(false);
+                setLoginPageVisibility(true);
             }
         );
     };
