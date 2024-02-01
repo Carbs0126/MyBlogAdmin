@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta
+            name="description"
+            content="管理端后台我的个人网站 Android iOS 前端 后端"
+        />
+        <link
+            rel="preload"
+            href="/font/Geist.woff2"
+            as="font"
+            crossorigin=""
+            type="font/woff2"
+        />
+        <link
+            rel="preload"
+            href="/font/JetBrains-Mono.woff2"
+            as="font"
+            crossorigin=""
+            type="font/woff2"
+        />
+        <title>管理端后台-我的个人网站</title>
+        <link rel="stylesheet" href="/css/index.style.css" />
+        <link rel="stylesheet" href="/css/login.style.css" />
+        <link
+            rel="preload"
+            as="style"
+            onload="this.onload=null;this.rel='stylesheet'"
+            href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+        />
+        <script>
+            let rootEl = document.querySelector("html");
+            function updateMode(e) {
+                e
+                    ? rootEl.classList.add("dark")
+                    : rootEl.classList.remove("dark");
+            }
+            let query =
+                    matchMedia && matchMedia("(prefers-color-scheme: dark)"),
+                isSystemDarkMode = query && query.matches;
+            query &&
+                query.addListener((e) => {
+                    delete sessionStorage.isDarkMode, updateMode(e.matches);
+                });
+            let isDarkMode = JSON.parse(sessionStorage.getItem("isDarkMode"));
+            null == isDarkMode && (isDarkMode = isSystemDarkMode),
+                updateMode(isDarkMode);
+        </script>
+        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
+        <script src="/js/router.js" type="module" defer></script>
+        <script src="/js/index.js" type="module" defer></script>
+        <script src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
+    </head>
+    <body>
+        <div id="login-page">
+            <!-- TODO 仿照github登录页面 -->
+            <div id="login-card">
+                <div id="login-text-title">登录</div>
+                <div
+                    id="login-input-username-wrapper"
+                    class="login-input-wrapper-style"
+                >
+                    <input
+                        id="login-input-username"
+                        type="text"
+                        class="login-input"
+                        placeholder="Username"
+                    />
+                </div>
+                <div
+                    id="login-input-password-wrapper"
+                    class="login-input-wrapper-style"
+                >
+                    <input
+                        type="password"
+                        id="login-input-password"
+                        class="login-input"
+                        placeholder="Password"
+                    />
+                </div>
+
+                <div id="login-button">点击登录</div>
+            </div>
+        </div>
+        <!--
+        <div
+            id="content-container-left"
+            class="background-light-gray unselectable"
+        >
+            <div id="person-info-card" class="menu-item-theme-light">
+                <div id="my-avatar-image-container">
+                    <img id="my-avatar-image" class="avatar-image-theme" />
+                </div>
+                <div id="person-info-card-right-content-container">
+                    <div id="author-name" class="text-highlight">Jian jun</div>
+                    <div id="author-job" class="text-normal">
+                        software engineer
+                    </div>
+                </div>
+            </div>
+
+            <div
+                id="menu-item-card-home"
+                class="menu-item-theme-light menu-item-card"
+                data-link="home"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-sparkles"
+                >
+                    <path
+                        d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"
+                    ></path>
+                    <path d="M5 3v4"></path>
+                    <path d="M19 17v4"></path>
+                    <path d="M3 5h4"></path>
+                    <path d="M17 19h4"></path>
+                </svg>
+                <div class="menu-item-card-title">Home</div>
+                <div class="menu-item-card-tag">1</div>
+            </div>
+            <div
+                id="menu-item-card-writing"
+                class="menu-item-theme-light menu-item-card"
+                data-link="writing"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-pencil-line"
+                >
+                    <path d="M12 20h9"></path>
+                    <path
+                        d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4Z"
+                    ></path>
+                    <path d="m15 5 3 3"></path>
+                </svg>
+                <div class="menu-item-card-title">Writing</div>
+                <div class="menu-item-card-tag">2</div>
+            </div>
+            <div
+                id="menu-item-card-column"
+                class="menu-item-theme-light menu-item-card"
+                data-link="column"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-navigation"
+                >
+                    <polygon points="3 11 22 2 13 21 11 13 3 11"></polygon>
+                </svg>
+                <div class="menu-item-card-title">Column</div>
+                <div class="menu-item-card-tag">3</div>
+            </div>
+            <div
+                id="menu-item-card-about"
+                class="menu-item-theme-light menu-item-card"
+                data-link="about"
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="lucide lucide-at-sign"
+                >
+                    <circle cx="12" cy="12" r="4"></circle>
+                    <path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-4 8"></path>
+                </svg>
+                <div class="menu-item-card-title">About</div>
+                <div class="menu-item-card-tag">4</div>
+            </div>
+        </div>
+        <div class="vertical-separator-line-100vh separator-line"></div>
+        <div id="content-container-right" class="bg-dots">
+            <div id="content-container-home">
+                <div id="content-container-home-article"></div>
+            </div>
+            <div id="content-container-writing">
+                <div id="content-container-writing-container">
+                    <div
+                        id="content-container-writing-list-container"
+                        class="background-light-gray unselectable"
+                    >
+                        <div
+                            id="content-container-writing-list-sticky-panel"
+                            class="background-light-gray unselectable"
+                        >
+                            <div
+                                id="content-container-writing-list-sticky-panel-title"
+                            >
+                                Writings
+                            </div>
+                        </div>
+                        <div
+                            id="content-container-writing-list"
+                            class="background-light-gray unselectable"
+                        ></div>
+                    </div>
+
+                    <div
+                        class="vertical-separator-line-100vh separator-line"
+                    ></div>
+                    <div id="content-container-writing-content">
+                        <div id="content-container-writing-content-empty">
+                            <div
+                                id="content-container-writing-content-empty-title"
+                            >
+                                Article Not found
+                            </div>
+                            <div
+                                id="content-container-writing-content-empty-hint"
+                            >
+                                This link might be broken, deleted, or moved.
+                                Nevertheless, there’s nothing to see here...
+                            </div>
+                        </div>
+                        <div
+                            id="content-container-writing-content-article-container"
+                        >
+                            <div
+                                id="content-container-writing-content-article"
+                            ></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div id="content-container-column"></div>
+            <div id="content-container-about">
+                <div id="content-container-about-article"></div>
+            </div>
+        </div>
+         -->
+    </body>
+</html>
