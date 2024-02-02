@@ -452,10 +452,7 @@ function setLoginButtonListener() {
         loginButtonEle.addEventListener("click", function () {
             console.log("loginButtonEle clicked ");
             util.toast("假装登录成功");
-            setLoginPageVisibility(false);
-            setContentPageVisibility(true);
-            updateUrlPath("/content");
-            showQuillEditor();
+            showContentPage();
         });
         loginButtonEle.setAttribute("hasOnClickListener", "added");
     }
@@ -487,6 +484,59 @@ function showQuillEditor() {
     });
 }
 
+function addContentPageNavItemsListener() {
+    addClickListenerForContentPageNavItem("content-page-nav-all-article");
+    addClickListenerForContentPageNavItem("content-page-nav-all-draft");
+    addClickListenerForContentPageNavItem("content-page-nav-all-column");
+}
+let allNavItemIDs = [
+    "content-page-nav-all-article",
+    "content-page-nav-all-draft",
+    "content-page-nav-all-column",
+];
+let selectedContentNavElementID = null;
+
+function addClickListenerForContentPageNavItem(elementID) {
+    let itemEle = document.getElementById(elementID);
+    if (!itemEle.hasAttribute("hasOnClickListener")) {
+        itemEle.addEventListener("click", function () {
+            selectedContentNavElementID = elementID;
+            // console.log("writing nav clicked ");
+            // updateUrlPath("/writing");
+            // clearWritingContentPanel();
+            updateNavElementUI();
+        });
+        itemEle.setAttribute("hasOnClickListener", "added");
+    }
+}
+
+function updateNavElementUI() {
+    for (let id of allNavItemIDs) {
+        let ele = document.getElementById(id);
+        if (id === selectedContentNavElementID) {
+            console.log("updateNavElementUI() selected id : " + id);
+            ele.setAttribute("class", "content-page-nav-item-selected");
+        } else {
+            console.log("updateNavElementUI() id : " + id);
+            ele.setAttribute("class", "content-page-nav-item");
+        }
+    }
+}
+
+function showContentPage() {
+    setLoginPageVisibility(false);
+    setContentPageVisibility(true);
+    updateUrlPath("/content");
+    addContentPageNavItemsListener();
+    showQuillEditor();
+}
+
+function showLoginPage() {
+    setContentPageVisibility(false);
+    setLoginPageVisibility(true);
+    updateUrlPath("/login");
+}
+
 (function () {
     window.onload = function () {
         checkAuth().then(
@@ -495,18 +545,13 @@ function showQuillEditor() {
                 // 内容界面
                 console.log("----展示内容界面-----");
                 console.log(result);
-                setLoginPageVisibility(false);
-                setContentPageVisibility(true);
-                updateUrlPath("/content");
-                showQuillEditor();
+                showContentPage();
             },
             function (error) {
                 // reject
                 // 登录界面
                 console.log("----展示登录界面-----");
-                setContentPageVisibility(false);
-                setLoginPageVisibility(true);
-                updateUrlPath("/login");
+                showLoginPage();
             }
         );
     };
