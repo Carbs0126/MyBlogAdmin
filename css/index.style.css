@@ -119,11 +119,24 @@ body {
     width: 1px;
     height: 100vh;
 }
-.horizontal-separator-line-100vh {
+.horizontal-separator-line-100vw {
     height: 1px;
     width: 100vh;
 }
+.vertical-separator-line-100p {
+    width: 1px;
+    height: 100%;
+}
+.horizontal-separator-line-100p {
+    height: 1px;
+    width: 100%;
+}
+
 .separator-line {
+    background-color: #e5e5e5;
+}
+
+.separator-line-dark {
     background-color: #c5c5c5;
 }
 

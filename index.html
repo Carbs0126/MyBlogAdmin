@@ -108,21 +108,106 @@
             </div>
         </div>
         <div id="content-page">
-            <div id="content-page-nav"></div>
+            <div id="content-page-nav" class="unselectable">
+                <div id="content-page-nav-title">
+                    <img
+                        id="content-page-nav-title-img"
+                        src="/img/icon-note.svg"
+                    />
+                    <div id="content-page-nav-title-text">文章管理</div>
+                </div>
+                <div id="content-page-nav-new-article">
+                    <img
+                        id="content-page-nav-new-article-img"
+                        src="/img/icon-add.svg"
+                    />
+                    <div id="content-page-nav-new-article-text">写文章</div>
+                </div>
 
-            <div class="vertical-separator-line-100vh separator-line"></div>
+                <div id="content-page-nav-all-article">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="menu-item-icon content-page-nav-icon-svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M3.66699 1.16675C2.83856 1.16675 2.16699 1.83832 2.16699 2.66675V13.3334C2.16699 14.1619 2.83857 14.8334 3.66699 14.8334H12.3337C13.1621 14.8334 13.8337 14.1619 13.8337 13.3334V3.98824L11.0122 1.16675H3.66699ZM10.6663 6.17188H5.33301V7.83854H10.6663V6.17188ZM8.66634 8.83854H5.33301V10.5052H8.66634V8.83854Z"
+                        ></path>
+                    </svg>
+                    <div class="content-page-nav-item-text">文章列表</div>
+                    <div class="content-page-nav-item-number">1</div>
+                </div>
+
+                <div id="content-page-nav-all-draft">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="menu-item-icon content-page-nav-icon-svg"
+                    >
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M8 1.25C4.27208 1.25 1.25 4.27208 1.25 8C1.25 11.7279 4.27208 14.75 8 14.75C11.7279 14.75 14.75 11.7279 14.75 8C14.75 4.27208 11.7279 1.25 8 1.25ZM8.75 7.37207V4.33325H7.25V7.9611L9.61707 10.5103L10.7163 9.48958L8.75 7.37207Z"
+                        ></path>
+                    </svg>
+                    <div class="content-page-nav-item-text">草稿列表</div>
+                    <div class="content-page-nav-item-number">0</div>
+                </div>
+                <div id="content-page-nav-all-column">
+                    <svg
+                        width="16"
+                        height="16"
+                        viewBox="0 0 16 16"
+                        fill="none"
+                        xmlns="http://www.w3.org/2000/svg"
+                        class="menu-item-icon content-page-nav-icon-svg"
+                    >
+                        <path
+                            d="M7.51656 2.30287C7.5777 2.17899 7.75436 2.17899 7.8155 2.30287L9.48856 5.6929C9.51286 5.7421 9.55976 5.7762 9.61406 5.78407L13.3552 6.3277C13.4919 6.34757 13.5465 6.51557 13.4476 6.61197L10.7405 9.25077C10.7012 9.28904 10.6833 9.3442 10.6925 9.39827L11.3316 13.1243C11.3549 13.2604 11.212 13.3643 11.0898 13.3L7.7436 11.5408C7.69503 11.5153 7.63703 11.5153 7.58846 11.5408L4.2423 13.3C4.12003 13.3643 3.97713 13.2604 4.00046 13.1243L4.63953 9.39827C4.6488 9.3442 4.6309 9.28904 4.5916 9.25077L1.8845 6.61197C1.78558 6.51557 1.84016 6.34757 1.97687 6.3277L5.718 5.78407C5.7723 5.7762 5.8192 5.7421 5.8435 5.6929L7.51656 2.30287Z"
+                        ></path>
+                        <path
+                            fill-rule="evenodd"
+                            clip-rule="evenodd"
+                            d="M7.66606 3.88294L6.59081 6.06166C6.44531 6.35625 6.16399 6.56133 5.83786 6.6087C5.83774 6.60872 5.83798 6.60868 5.83786 6.6087L3.4335 6.95808L5.17298 8.65368M9.49426 6.6087C9.16813 6.56133 8.88692 6.35648 8.74142 6.06189L7.66606 3.88294M8.56281 1.93402C8.196 1.19077 7.13612 1.19077 6.76931 1.93402C6.76931 1.93402 6.76931 1.93403 6.76931 1.93402L5.25136 5.00976L1.85706 5.50299C1.03704 5.62216 0.709199 6.63003 1.30285 7.20866C1.30282 7.20864 1.30287 7.20869 1.30285 7.20866L3.75897 9.60282L3.17915 12.9834C3.03916 13.8001 3.89641 14.4232 4.63005 14.0376L7.66606 12.4415L10.702 14.0376C11.4356 14.4232 12.293 13.8002 12.153 12.9835L11.5732 9.60282L14.0292 7.20878C14.0291 7.20881 14.0292 7.20874 14.0292 7.20878C14.6229 6.63005 14.295 5.62215 13.4751 5.50299L10.0808 5.00976L8.56281 1.93402C8.56281 1.93403 8.56281 1.93402 8.56281 1.93402ZM7.97628 12.2784C7.97656 12.2782 7.976 12.2785 7.97628 12.2784ZM4.00995 9.84746C4.01004 9.84756 4.00985 9.84737 4.00995 9.84746Z"
+                        ></path>
+                    </svg>
+                    <div class="content-page-nav-item-text">专栏列表</div>
+                    <div class="content-page-nav-item-number">0</div>
+                </div>
+            </div>
+
+            <div
+                class="vertical-separator-line-100vh separator-line-dark"
+            ></div>
+            <div id="content-page-list"></div>
+            <div
+                class="vertical-separator-line-100vh separator-line-dark"
+            ></div>
 
             <div id="content-page-content">
                 <div id="article-info-container">
                     <input
                         id="article-title-input"
                         type="text"
+                        autocomplete="off"
                         placeholder="文章标题"
                     />
+                    <div
+                        class="horizontal-separator-line-100p separator-line-dark"
+                    ></div>
                     <div id="article-info-bottom-container">
                         <input
                             id="article-url-input"
                             type="text"
+                            autocomplete="off"
                             placeholder="文章url"
                         />
                         <div id="article-save-draft">存草稿</div>
