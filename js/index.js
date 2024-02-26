@@ -1,5 +1,8 @@
 import router from "./router.js";
 import util from "./util.js";
+import net from "./net.js";
+import keys from "./keys.js";
+import consts from "./consts.js";
 
 const TOKEN = "token";
 
@@ -450,12 +453,36 @@ function setLoginButtonListener() {
     let loginButtonEle = document.getElementById("login-button");
     if (!loginButtonEle.hasAttribute("hasOnClickListener")) {
         loginButtonEle.addEventListener("click", function () {
-            console.log("loginButtonEle clicked ");
-            util.toast("假装登录成功");
-            showContentPage();
+            adminLogin();
         });
         loginButtonEle.setAttribute("hasOnClickListener", "added");
     }
+}
+
+function adminLogin() {
+    let username = document.getElementById("login-input-username").value;
+    let password = document.getElementById("login-input-password").value;
+    if (username.length == 0) {
+        util.toast("请输入用户名");
+        return;
+    }
+    if (password.length == 0) {
+        util.toast("请输入密码");
+        return;
+    }
+    net.postData(consts.URL_LOGIN, {
+        username: username,
+        password: password,
+    }).then((data) => {
+        if (data.code == 0) {
+            util.toast("登录成功");
+            util.setCookie(TOKEN, data.data.token);
+            // showContentPage();
+        } else {
+            util.toast(data.message);
+        }
+        console.log(data);
+    });
 }
 
 function setTogglePasswordVisibilityButtonListener() {
@@ -554,5 +581,6 @@ function showLoginPage() {
                 showLoginPage();
             }
         );
+        keys.addKeyListeners();
     };
 })();

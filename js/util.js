@@ -1,5 +1,21 @@
-function getCookie(cookieName) {
-    var name = cookieName + "=";
+function setCookie(key, value, expireDay = 7) {
+    // 构造要设置的cookie字符串
+    var cookieString = key + "=" + encodeURIComponent(value);
+
+    // 设置cookie的过期时间（可选）
+    var expirationDate = new Date();
+    expirationDate.setDate(expirationDate.getDate() + expireDay); // 7天后过期
+    cookieString += "; expires=" + expirationDate.toUTCString();
+
+    // 设置cookie的路径（可选）
+    cookieString += "; path=/";
+
+    // 设置cookie
+    document.cookie = cookieString;
+}
+
+function getCookie(key) {
+    var name = key + "=";
     var decodedCookie = decodeURIComponent(document.cookie);
     var cookieArray = decodedCookie.split(";");
 
@@ -29,6 +45,7 @@ function toast(str) {
 }
 
 export default {
+    setCookie,
     getCookie,
     toast,
 };
