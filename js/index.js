@@ -102,11 +102,13 @@ function adminLogin() {
 let quillEditor = null;
 
 function showQuillEditor() {
-    quillEditor = new Quill("#article-editor", {
-        theme: "snow",
-        placeholder: "在此输入文字内容...",
-        readOnly: false,
-    });
+    if (quillEditor == null) {
+        quillEditor = new Quill("#article-editor", {
+            theme: "snow",
+            placeholder: "在此输入文字内容...",
+            readOnly: false,
+        });
+    }
 }
 
 function addContentPageNavItemsListener() {
