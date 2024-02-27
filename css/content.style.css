@@ -21,6 +21,8 @@
     width: 18rem;
     height: 100vh;
     background-color: white;
+    display: flex;
+    flex-direction: column;
 }
 
 #content-page-nav-title {
@@ -89,10 +91,12 @@
     background-color: #3187fa;
     color: white;
     cursor: pointer;
+    transition: background-color 0.3s linear;
 }
 
 #content-page-nav-new-article:hover {
     background-color: #1a76f4;
+    transition: background-color 0.3s linear;
 }
 
 #content-page-nav-new-article-img {
@@ -116,10 +120,12 @@
     background-color: white;
     color: #444;
     cursor: pointer;
+    transition: background-color 0.3s linear;
 }
 
 .content-page-nav-item:hover {
     background-color: var(--nav-hover-bg);
+    transition: background-color 0.3s linear;
 }
 .content-page-nav-item-selected {
     height: 48px;
@@ -157,6 +163,29 @@
     margin-top: 8px;
 }
 
+#content-page-nav-space {
+    flex: 1;
+}
+
+#content-page-nav-logout {
+    cursor: pointer;
+    margin-left: 24px;
+    margin-right: 24px;
+    border-radius: 8px;
+    background-color: #eeeeee;
+    margin-bottom: 40px;
+    padding-top: 16px;
+    padding-bottom: 16px;
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #666;
+    text-align: center;
+    transition: background-color 0.3s linear;
+}
+#content-page-nav-logout:hover {
+    background-color: #dddddd;
+    transition: background-color 0.3s linear;
+}
 /* 中间列表 */
 #content-page-list {
     width: 20rem;
@@ -235,10 +264,12 @@
     cursor: pointer;
     border: #1a76f4 1px solid;
     color: #1a76f4;
+    transition: background-color 0.3s linear;
 }
 
 #article-save-draft:hover {
     color: #3187fa;
+    transition: background-color 0.3s linear;
 }
 
 #article-publish {
@@ -253,10 +284,12 @@
     color: white;
     cursor: pointer;
     background-color: #1a76f4;
+    transition: background-color 0.3s linear;
 }
 
 #article-publish:hover {
     background-color: #3187fa;
+    transition: background-color 0.3s linear;
 }
 
 #article-editor-container {

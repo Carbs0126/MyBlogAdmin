@@ -25,8 +25,11 @@ function getCookie(key) {
             return cookie.substring(name.length, cookie.length);
         }
     }
+    return null;
+}
 
-    return null; // 如果找不到对应名称的Cookie
+function clearCookie(key) {
+    document.cookie = key + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
 }
 
 function toast(str) {
@@ -47,5 +50,6 @@ function toast(str) {
 export default {
     setCookie,
     getCookie,
+    clearCookie,
     toast,
 };
