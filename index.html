@@ -27,18 +27,21 @@
         <link rel="stylesheet" href="/css/login.style.css" />
         <link rel="stylesheet" href="/css/content.style.css" />
         <link
-            rel="preload"
-            as="style"
-            onload="this.onload=null;this.rel='stylesheet'"
+            rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
         />
+        <!-- Include your favorite highlight.js stylesheet -->
+        <link
+            rel="stylesheet"
+            href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
+        />
+
+        <!-- Include the highlight.js library -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
         <link
-            rel="preload"
-            as="style"
-            onload="this.onload=null;this.rel='stylesheet'"
-            href="https://cdn.quilljs.com/1.3.6/quill.snow.css"
             rel="stylesheet"
+            href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
         />
 
         <script>
@@ -59,15 +62,13 @@
             null == isDarkMode && (isDarkMode = isSystemDarkMode),
                 updateMode(isDarkMode);
         </script>
-        <script src="https://unpkg.com/axios@1.1.2/dist/axios.min.js"></script>
-        <script src="https://cdn.quilljs.com/1.3.6/quill.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
         <script src="/js/router.js" type="module" defer></script>
         <script src="/js/index.js" type="module" defer></script>
         <script src="https://cdn.jsdelivr.net/npm/toastify-js" defer></script>
     </head>
     <body>
         <div id="login-page" class="unselectable">
-            <!-- TODO 仿照github登录页面 -->
             <div id="login-card">
                 <div id="login-text-title">Welcome Back!</div>
                 <div id="login-text-username-hint" class="login-text-hint">
@@ -209,17 +210,24 @@
                         id="article-title-input"
                         type="text"
                         autocomplete="off"
-                        placeholder="文章标题"
+                        placeholder="Article Title"
                     />
                     <div
                         class="horizontal-separator-line-100p separator-line-dark"
                     ></div>
-                    <div id="article-info-bottom-container">
+                    <div id="article-other-input-container">
                         <input
-                            id="article-url-input"
+                            id="article-comment-input"
                             type="text"
                             autocomplete="off"
-                            placeholder="文章url"
+                            placeholder="Article Comment"
+                        />
+                        <input
+                            id="article-identifier-input"
+                            type="text"
+                            autocomplete="off"
+                            placeholder="Article Unique Identifier"
+                            disabled
                         />
                         <div id="article-save-draft">存草稿</div>
                         <div id="article-publish">发布</div>

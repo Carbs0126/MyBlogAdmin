@@ -100,9 +100,33 @@ let quillEditor = null;
 
 function showQuillEditor() {
     if (quillEditor == null) {
+        const toolbarOptions = [
+            ["bold", "italic", "underline", "strike"], // toggled buttons
+            ["blockquote", "code-block"],
+            ["link", "image", "video", "formula"],
+
+            [{ header: 1 }, { header: 2 }], // custom button values
+            [{ list: "ordered" }, { list: "bullet" }, { list: "check" }],
+            [{ script: "sub" }, { script: "super" }], // superscript/subscript
+            [{ indent: "-1" }, { indent: "+1" }], // outdent/indent
+            [{ direction: "rtl" }], // text direction
+
+            [{ size: ["small", false, "large", "huge"] }], // custom dropdown
+            [{ header: [1, 2, 3, 4, 5, 6, false] }],
+
+            [{ color: [] }, { background: [] }], // dropdown with defaults from theme
+            [{ font: [] }],
+            [{ align: [] }],
+
+            ["clean"], // remove formatting button
+        ];
         quillEditor = new Quill("#article-editor", {
+            modules: {
+                syntax: true,
+                toolbar: toolbarOptions,
+            },
             theme: "snow",
-            placeholder: "在此输入文字内容...",
+            placeholder: "Article Content...",
             readOnly: false,
         });
     }
@@ -158,6 +182,25 @@ function showLoginPage() {
     updateUrlPath("/login");
 }
 
+function publishArticle() {
+    let articleHtmlContent = quillEditor.root.innerHTML;
+
+    net.postData(consts.URL_PUBLISH_ARTICLE, {
+        token: util.getCookie(TOKEN),
+        article_title: document.getElementById("article-title-input").value,
+        article_content: articleHtmlContent,
+        article_comment: document.getElementById("article-comment-input").value,
+        author_id: "1",
+    }).then((data) => {
+        if (data.code == 0) {
+            util.toast("文章发布成功");
+        } else {
+            util.toast(data.message);
+        }
+        console.log(data);
+    });
+}
+
 function setListeners() {
     // 登录页面
     document
@@ -183,6 +226,11 @@ function setListeners() {
         .getElementById("content-page-nav-logout")
         .addEventListener("click", function () {
             adminLogout();
+        });
+    document
+        .getElementById("article-publish")
+        .addEventListener("click", function () {
+            publishArticle();
         });
 }
 

@@ -1,6 +1,7 @@
 :root {
     --content-page-info-container-height: 110px;
-    --text-color-blue: #3187fa;
+    --color-accent: #3187fa;
+    --color-accent-dark: #1a76f4;
     --text-color-nav-normal: #464c5a;
     --nav-hover-bg: #f0f1f3;
     --nav-selected-bg: #e7f0fe;
@@ -43,7 +44,7 @@
 #content-page-nav-title-text {
     font-size: 20px;
     font-weight: bold;
-    color: #1a76f4;
+    color: var(--color-accent-dark);
     margin-left: 12px;
     height: 44px;
     width: fit-content;
@@ -88,14 +89,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background-color: #3187fa;
+    background-color: var(--color-accent);
     color: white;
     cursor: pointer;
     transition: background-color 0.3s linear;
 }
 
 #content-page-nav-new-article:hover {
-    background-color: #1a76f4;
+    background-color: var(--color-accent-dark);
     transition: background-color 0.3s linear;
 }
 
@@ -132,20 +133,20 @@
     padding-left: 22px;
     display: flex;
     align-items: center;
-    background-color: white;
-    color: var(--text-color-blue);
+    background-color: #f0f0f0;
+    color: var(--color-accent);
     cursor: pointer;
 }
 .content-page-nav-item-selected .content-page-nav-item-text {
-    color: var(--text-color-blue);
+    color: var(--color-accent);
 }
 
 .content-page-nav-item-selected .content-page-nav-item-number {
-    color: var(--text-color-blue);
+    color: var(--color-accent);
 }
 
 .content-page-nav-item-selected .menu-item-icon {
-    color: var(--text-color-blue);
+    color: var(--color-accent);
 }
 
 /* 最左侧导航栏--文章列表 */
@@ -227,7 +228,17 @@
     background-color: transparent;
 }
 
-#article-url-input {
+#article-other-input-container {
+    display: flex;
+    flex: 1;
+    align-items: center;
+    margin-top: 4px;
+    width: 100%;
+    flex-direction: row;
+    height: 44px;
+}
+
+#article-comment-input {
     box-shadow: none;
     border-bottom: 1px #c5c5c5 solid;
     border-left: none;
@@ -244,14 +255,32 @@
     background-color: transparent;
 }
 
-#article-info-bottom-container {
+#article-identifier-input {
+    box-shadow: none;
+    border-bottom: 1px #c5c5c5 solid;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    outline: none;
+    /* width: 100%; */
+    /* height: 60px; */
+    padding-left: 16px;
+    padding-right: 16px;
+    font-size: 18px;
+    height: 42px;
+    flex: 1;
+    margin-left: 16px;
+    background-color: transparent;
+}
+
+/* #article-info-bottom-container {
     align-items: center;
     margin-top: 4px;
     width: 100%;
     display: flex;
     flex-direction: row;
     height: 44px;
-}
+} */
 
 #article-save-draft {
     margin-left: 16px;
@@ -262,13 +291,13 @@
     border-radius: 4px;
     color: white;
     cursor: pointer;
-    border: #1a76f4 1px solid;
-    color: #1a76f4;
+    border: var(--color-accent) 1px solid;
+    color: var(--color-accent);
     transition: background-color 0.3s linear;
 }
 
 #article-save-draft:hover {
-    color: #3187fa;
+    color: var(--color-accent-dark);
     transition: background-color 0.3s linear;
 }
 
@@ -283,12 +312,12 @@
     border-radius: 4px;
     color: white;
     cursor: pointer;
-    background-color: #1a76f4;
+    background-color: var(--color-accent);
     transition: background-color 0.3s linear;
 }
 
 #article-publish:hover {
-    background-color: #3187fa;
+    background-color: var(--color-accent-dark);
     transition: background-color 0.3s linear;
 }
 
