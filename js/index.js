@@ -203,66 +203,119 @@ function publishArticle() {
 
 function setListeners() {
     // 登录页面
-    document
-        .getElementById("login-button")
-        .addEventListener("click", function () {
-            adminLogin();
-        });
-    document
-        .getElementById("login-password-toggle-div")
-        .addEventListener("click", function () {
-            console.log("toggleButton clicked ");
-            let inputPassword = document.getElementById("login-input-password");
-            if (inputPassword.type === "password") {
-                inputPassword.type = "text";
-                console.log("inputPassword.type = text");
-            } else {
-                inputPassword.type = "password";
-                console.log("inputPassword.type = password");
-            }
-        });
+    addClickListener("login-button", adminLogin);
+    addClickListener("login-password-toggle-div", togglePasswordVisibility);
     // 编辑页面
-    document
-        .getElementById("content-page-nav-logout")
-        .addEventListener("click", function () {
-            adminLogout();
-        });
-    document
-        .getElementById("article-publish")
-        .addEventListener("click", function () {
-            publishArticle();
-        });
+    addClickListener("content-page-nav-new-article", showEditorContainer);
+    addClickListener("content-page-nav-all-article", showAllArticles);
+    addClickListener("content-page-nav-logout", adminLogout);
+    addClickListener("article-publish", publishArticle);
 }
-
+function togglePasswordVisibility() {
+    let inputPassword = document.getElementById("login-input-password");
+    if (inputPassword.type === "password") {
+        inputPassword.type = "text";
+    } else {
+        inputPassword.type = "password";
+    }
+}
 function adminLogout() {
     util.clearCookie(TOKEN);
     showLoginPage();
 }
+function showEditorContainer() {
+    setEditorContainerVisibility(true);
+}
+function setEditorContainerVisibility(isVisible) {
+    let contentPage = document.getElementById("content-page-content");
+    if (isVisible) {
+        contentPage.style.display = "block";
+    } else {
+        contentPage.style.display = "none";
+    }
+}
+function showAllArticles() {
+    clearListContainer();
+    net.getData(consts.URL_ARTICLE_LIST).then((data) => {
+        if (data.code == 0) {
+            util.toast("请求成功");
+            let articleListContainerElement =
+                document.getElementById("content-page-list");
+            for (let i = 0; i < data.data.length; i++) {
+                let dataItem = data.data[i];
+                let itemContainerEle = createOneArticleListItemContainerEle(
+                    "article-brief-info-container-id-" + i,
+                    dataItem.title,
+                    util.secondTimeToDateStr(dataItem.create_date),
+                    dataItem.unique_identifier
+                );
+                articleListContainerElement.appendChild(itemContainerEle);
+                // articleItemBriefs.push(itemContainerEle);
+                // if (uniqueIdentifierInPath == dataItem.unique_identifier) {
+                //     selectedItem = itemContainerEle;
+                // }
+            }
+            // if (selectedItem != null) {
+            //     console.log("------>>>>>>>>>> select and show article");
+            //     updateArticleItemForSelectedAndUnselectedTheme(selectedItem);
+            //     requestArticleDetailAndShowContent(uniqueIdentifierInPath);
+            // }
+        } else {
+            util.toast(data.message);
+        }
+        console.log(data);
+    });
 
-function showWaitingDialog() {}
+    // let listContainer = document.getElementById("content-page-list");
+}
+function clearListContainer() {
+    document.getElementById("content-page-list").innerHTML = "";
+}
 
-function hideWaitingDialog() {}
+function createOneArticleListItemContainerEle(containerID, title, hint, path) {
+    let itemElementContainer = document.createElement("div");
+    itemElementContainer.setAttribute("id", containerID);
+    itemElementContainer.setAttribute(
+        "class",
+        "article-brief-info-container menu-item-theme-light"
+    );
+    let itemElementTitle = document.createElement("div");
+    itemElementTitle.setAttribute(
+        "class",
+        "article-brief-info-title text-highlight"
+    );
+    itemElementTitle.innerHTML = title;
+
+    let itemElementHint = document.createElement("div");
+    itemElementHint.setAttribute(
+        "class",
+        "article-brief-info-hint text-normal"
+    );
+    itemElementHint.innerHTML = hint;
+    itemElementContainer.appendChild(itemElementTitle);
+    itemElementContainer.appendChild(itemElementHint);
+    itemElementContainer.addEventListener("click", function () {
+        // updateUrlPath("/article/" + path);
+        // clearArticleContentPanel();
+        // requestArticleDetailAndShowContent(path);
+        // updateArticleItemForSelectedAndUnselectedTheme(this);
+    });
+    itemElementContainer.setAttribute("article-path", path);
+    return itemElementContainer;
+}
+
+function addClickListener(elementID, onClickFunc) {
+    document.getElementById(elementID).addEventListener("click", onClickFunc);
+}
 
 (function () {
     window.onload = function () {
         setListeners();
-        showWaitingDialog();
         checkToken().then(
             function (result) {
-                hideWaitingDialog();
-                // resolve
-                // 内容界面
-                console.log("----展示内容界面-----");
-                console.log(result);
                 showContentPage();
             },
-            function (error) {
-                hideWaitingDialog();
-                // reject
-                // 登录界面
-                // console.log("----展示登录界面-----");
-                // showLoginPage();
-            }
+            function (error) {}
         );
         keys.addKeyListeners();
     };

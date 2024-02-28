@@ -32,5 +32,6 @@ async function postData(url = "", data = {}) {
 }
 
 export default {
+    getData,
     postData,
 };
