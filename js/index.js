@@ -10,26 +10,23 @@ function updateUrlPath(path) {
     window.history.replaceState(null, "", path);
 }
 
-function checkAuth() {
+function checkToken() {
     return new Promise((resolve, reject) => {
         let tokenInCookie = util.getCookie(TOKEN);
+        console.log("token in cookie :" + tokenInCookie);
         if (tokenInCookie.length > 0) {
             // TODO 等待对话框
-            axios
-                .get("/auth?token=" + tokenInCookie)
-                .then(function (response) {
-                    // handle success
-                    console.log(response);
-                    resolve(response);
-                })
-                .catch(function (error) {
-                    // handle error
-                    console.log(error);
-                    reject(error);
-                })
-                .finally(function () {
-                    // always executed
-                });
+            net.postData(consts.URL_CHECK_TOKEN, {
+                token: tokenInCookie,
+            }).then((data) => {
+                if (data.code == 0) {
+                    util.toast("token有效");
+                    showContentPage();
+                } else {
+                    util.toast(data.message);
+                }
+                console.log(data);
+            });
         } else {
             reject(null);
         }
@@ -194,11 +191,17 @@ function adminLogout() {
     showLoginPage();
 }
 
+function showWaitingDialog() {}
+
+function hideWaitingDialog() {}
+
 (function () {
     window.onload = function () {
         setListeners();
-        checkAuth().then(
+        showWaitingDialog();
+        checkToken().then(
             function (result) {
+                hideWaitingDialog();
                 // resolve
                 // 内容界面
                 console.log("----展示内容界面-----");
@@ -206,10 +209,11 @@ function adminLogout() {
                 showContentPage();
             },
             function (error) {
+                hideWaitingDialog();
                 // reject
                 // 登录界面
-                console.log("----展示登录界面-----");
-                showLoginPage();
+                // console.log("----展示登录界面-----");
+                // showLoginPage();
             }
         );
         keys.addKeyListeners();
