@@ -235,7 +235,7 @@ function setEditorContainerVisibility(isVisible) {
 }
 function showAllArticles() {
     clearListContainer();
-    net.getData(consts.URL_ARTICLE_LIST).then((data) => {
+    net.getData(consts.URL_ARTICLE_LIST_ALL).then((data) => {
         if (data.code == 0) {
             util.toast("请求成功");
             let articleListContainerElement =
