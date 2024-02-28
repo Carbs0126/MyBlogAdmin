@@ -13,7 +13,6 @@ function updateUrlPath(path) {
 function checkToken() {
     return new Promise((resolve, reject) => {
         let tokenInCookie = util.getCookie(TOKEN);
-        console.log("token in cookie :" + tokenInCookie);
         if (tokenInCookie.length > 0) {
             net.postData(consts.URL_CHECK_TOKEN, {
                 token: tokenInCookie,
@@ -161,10 +160,8 @@ function updateNavElementUI() {
     for (let id of allNavItemIDs) {
         let ele = document.getElementById(id);
         if (id === selectedContentNavElementID) {
-            console.log("updateNavElementUI() selected id : " + id);
             ele.setAttribute("class", "content-page-nav-item-selected");
         } else {
-            console.log("updateNavElementUI() id : " + id);
             ele.setAttribute("class", "content-page-nav-item");
         }
     }
@@ -297,13 +294,33 @@ function createOneArticleListItemContainerEle(containerID, title, hint, path) {
     itemElementContainer.appendChild(itemElementTitle);
     itemElementContainer.appendChild(itemElementHint);
     itemElementContainer.addEventListener("click", function () {
-        // updateUrlPath("/article/" + path);
-        // clearArticleContentPanel();
         requestArticleDetailAndShowContent(path);
-        // updateArticleItemForSelectedAndUnselectedTheme(this);
+        updateArticleItemForSelectedAndUnselectedTheme(this);
     });
     itemElementContainer.setAttribute("article-path", path);
     return itemElementContainer;
+}
+
+function updateArticleItemForSelectedAndUnselectedTheme(selectedElement) {
+    let articleItemBriefs =
+        document.getElementById("content-page-list").children;
+    for (let element of articleItemBriefs) {
+        if (element == selectedElement) {
+            element.setAttribute(
+                "class",
+                "article-brief-info-container menu-item-theme-light menu-item-selection"
+            );
+            let titleElement = element.children[0];
+            titleElement.setAttribute("class", "text-highlight-reverse-bg");
+        } else {
+            element.setAttribute(
+                "class",
+                "article-brief-info-container menu-item-theme-light"
+            );
+            let titleElement = element.children[0];
+            titleElement.setAttribute("class", "text-highlight");
+        }
+    }
 }
 
 function requestArticleDetailAndShowContent(articleIdentifier) {

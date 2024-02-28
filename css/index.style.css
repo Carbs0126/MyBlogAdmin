@@ -223,7 +223,7 @@ body {
 }
 .menu-item-theme-light.menu-item-selection:hover {
     cursor: pointer;
-    background-color: #000;
+    /* background-color: #000; */
     transition: background-color 0.2s linear;
 }
 

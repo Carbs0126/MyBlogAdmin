@@ -341,6 +341,11 @@
     color: black;
 }
 
+.menu-item-theme-light.menu-item-selection {
+    background-color: var(--content-color-accent);
+    color: white;
+}
+
 .text-highlight {
     color: #444;
     font-weight: bold;
