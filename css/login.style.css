@@ -1,6 +1,7 @@
 :root {
-    /* 340px */
     --login-elements-width-percentage: 85%;
+    --login-color-accent: #8f5cea;
+    --login-color-accent-dark: #5d22df;
 }
 
 /* ------------------------------- 登录 页面 --------------------------------- */
@@ -53,7 +54,7 @@
     box-shadow: none;
     background-color: #fbfbfb;
     outline: none;
-    border: 2px solid blue;
+    border: 2px solid var(--login-color-accent-dark);
     border-radius: 6px;
     transition: border-color 0.3s ease;
 }
@@ -115,7 +116,7 @@
 }
 
 #login-button {
-    background-color: #428546;
+    background-color: var(--login-color-accent);
     margin-top: 32px;
     outline: none;
     width: var(--login-elements-width-percentage);
@@ -132,7 +133,7 @@
 }
 
 #login-button:hover {
-    background-color: #326526;
+    background-color: var(--login-color-accent-dark);
     transition: background-color 0.3s ease;
 }
 

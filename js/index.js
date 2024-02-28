@@ -15,17 +15,16 @@ function checkToken() {
         let tokenInCookie = util.getCookie(TOKEN);
         console.log("token in cookie :" + tokenInCookie);
         if (tokenInCookie.length > 0) {
-            // TODO 等待对话框
             net.postData(consts.URL_CHECK_TOKEN, {
                 token: tokenInCookie,
             }).then((data) => {
                 if (data.code == 0) {
                     util.toast("token有效");
-                    showContentPage();
+                    resolve(data);
                 } else {
                     util.toast(data.message);
+                    reject(null);
                 }
-                console.log(data);
             });
         } else {
             reject(null);
@@ -34,6 +33,7 @@ function checkToken() {
 }
 
 function setLoginPageVisibility(isVisible) {
+    console.log("setLoginPageVisibility");
     let loginPage = document.getElementById("login-page");
     if (isVisible) {
         loginPage.style.display = "flex";
@@ -63,9 +63,11 @@ function setInputUIEffect(focusID, changeStyleID) {
     let wrapperEle = document.getElementById(changeStyleID);
     let inputEle = document.getElementById(focusID);
     inputEle.addEventListener("focus", function () {
+        console.log("focus");
         wrapperEle.setAttribute("class", "login-input-wrapper-style-focus");
     });
     inputEle.addEventListener("blur", function () {
+        console.log("blur");
         wrapperEle.setAttribute("class", "login-input-wrapper-style");
     });
 }
@@ -340,7 +342,9 @@ function addClickListener(elementID, onClickFunc) {
             function (result) {
                 showContentPage();
             },
-            function (error) {}
+            function (error) {
+                showLoginPage();
+            }
         );
         keys.addKeyListeners();
     };

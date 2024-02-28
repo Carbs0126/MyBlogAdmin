@@ -30,38 +30,17 @@
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
         />
-        <!-- Include your favorite highlight.js stylesheet -->
         <link
             rel="stylesheet"
             href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
         />
 
-        <!-- Include the highlight.js library -->
         <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
 
         <link
             rel="stylesheet"
             href="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.snow.css"
         />
-
-        <script>
-            let rootEl = document.querySelector("html");
-            function updateMode(e) {
-                e
-                    ? rootEl.classList.add("dark")
-                    : rootEl.classList.remove("dark");
-            }
-            let query =
-                    matchMedia && matchMedia("(prefers-color-scheme: dark)"),
-                isSystemDarkMode = query && query.matches;
-            query &&
-                query.addListener((e) => {
-                    delete sessionStorage.isDarkMode, updateMode(e.matches);
-                });
-            let isDarkMode = JSON.parse(sessionStorage.getItem("isDarkMode"));
-            null == isDarkMode && (isDarkMode = isSystemDarkMode),
-                updateMode(isDarkMode);
-        </script>
         <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0-rc.2/dist/quill.js"></script>
         <script src="/js/router.js" type="module" defer></script>
         <script src="/js/index.js" type="module" defer></script>
@@ -110,19 +89,8 @@
         </div>
         <div id="content-page">
             <div id="content-page-nav" class="unselectable">
-                <div id="content-page-nav-title">
-                    <img
-                        id="content-page-nav-title-img"
-                        src="/img/icon-note.svg"
-                    />
-                    <div id="content-page-nav-title-text">文章管理</div>
-                </div>
                 <div id="content-page-nav-new-article">
-                    <img
-                        id="content-page-nav-new-article-img"
-                        src="/img/icon-add.svg"
-                    />
-                    <div id="content-page-nav-new-article-text">写文章</div>
+                    <div id="content-page-nav-new-article-text">写新文章</div>
                 </div>
 
                 <div
@@ -210,7 +178,7 @@
                         id="article-title-input"
                         type="text"
                         autocomplete="off"
-                        placeholder="Article Title"
+                        placeholder="标题"
                     />
                     <div
                         class="horizontal-separator-line-100p separator-line-dark"
@@ -220,13 +188,13 @@
                             id="article-comment-input"
                             type="text"
                             autocomplete="off"
-                            placeholder="Article Comment"
+                            placeholder="备注"
                         />
                         <input
                             id="article-identifier-input"
                             type="text"
                             autocomplete="off"
-                            placeholder="Article Unique Identifier"
+                            placeholder="唯一标识符"
                             disabled
                         />
                         <div id="article-save-draft">存草稿</div>
