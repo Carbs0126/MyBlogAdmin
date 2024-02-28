@@ -243,31 +243,31 @@ function showAllArticles() {
                 document.getElementById("content-page-list");
             for (let i = 0; i < data.data.length; i++) {
                 let dataItem = data.data[i];
+                let createDateStr = util.secondTimeToDateStr(
+                    dataItem.create_date
+                );
+                let updateDateStr = util.secondTimeToDateStr(
+                    dataItem.update_date
+                );
+                let hint = createDateStr;
+                if (dataItem.create_date != dataItem.update_date) {
+                    hint = createDateStr + "  " + updateDateStr;
+                }
                 let itemContainerEle = createOneArticleListItemContainerEle(
                     "article-brief-info-container-id-" + i,
                     dataItem.title,
-                    util.secondTimeToDateStr(dataItem.create_date),
+                    hint,
                     dataItem.unique_identifier
                 );
                 articleListContainerElement.appendChild(itemContainerEle);
-                // articleItemBriefs.push(itemContainerEle);
-                // if (uniqueIdentifierInPath == dataItem.unique_identifier) {
-                //     selectedItem = itemContainerEle;
-                // }
             }
-            // if (selectedItem != null) {
-            //     console.log("------>>>>>>>>>> select and show article");
-            //     updateArticleItemForSelectedAndUnselectedTheme(selectedItem);
-            //     requestArticleDetailAndShowContent(uniqueIdentifierInPath);
-            // }
         } else {
             util.toast(data.message);
         }
         console.log(data);
     });
-
-    // let listContainer = document.getElementById("content-page-list");
 }
+
 function clearListContainer() {
     document.getElementById("content-page-list").innerHTML = "";
 }
@@ -297,11 +297,36 @@ function createOneArticleListItemContainerEle(containerID, title, hint, path) {
     itemElementContainer.addEventListener("click", function () {
         // updateUrlPath("/article/" + path);
         // clearArticleContentPanel();
-        // requestArticleDetailAndShowContent(path);
+        requestArticleDetailAndShowContent(path);
         // updateArticleItemForSelectedAndUnselectedTheme(this);
     });
     itemElementContainer.setAttribute("article-path", path);
     return itemElementContainer;
+}
+
+function requestArticleDetailAndShowContent(articleIdentifier) {
+    net.getData(consts.URL_ARTICLE_DETAIL + articleIdentifier).then((data) => {
+        if (data.code == 0) {
+            showEditorContainer();
+            showArticleContentPanel(
+                data.data.title,
+                data.data.content,
+                articleIdentifier,
+                data.data.update_date
+            );
+        } else {
+            util.toast(data.message);
+        }
+        console.log(data);
+    });
+}
+
+// todo  comment
+function showArticleContentPanel(title, content, articleIdentifier, comment) {
+    document.getElementById("article-title-input").value = title;
+    document.getElementById("article-identifier-input").value =
+        articleIdentifier;
+    quillEditor.clipboard.dangerouslyPasteHTML(content);
 }
 
 function addClickListener(elementID, onClickFunc) {

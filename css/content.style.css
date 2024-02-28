@@ -19,7 +19,7 @@
 }
 /* 最左侧导航 */
 #content-page-nav {
-    width: 18rem;
+    width: 240px;
     height: 100vh;
     background-color: white;
     display: flex;
@@ -189,17 +189,17 @@
 }
 /* 中间列表 */
 #content-page-list {
-    width: 20rem;
+    width: 320px;
     height: 100vh;
     background-color: white;
 }
 
 #content-page-content {
     margin-left: 16px;
-    /* flex: 1; */
+    flex: 1;
     /* display: flex; */
     /* flex-direction: column; */
-    width: 100vw;
+    /* width: 100vw; */
     height: 100vh;
 }
 
@@ -379,6 +379,7 @@
 
 .article-brief-info-hint {
     margin-top: 4px;
+    font-size: 12px;
 }
 
 .text-normal {
