@@ -27,6 +27,7 @@ function checkToken() {
                     resolve(data);
                 } else {
                     util.toast(data.message);
+                    util.toast("重新登录");
                     reject(null);
                 }
             });
