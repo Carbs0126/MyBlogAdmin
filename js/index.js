@@ -233,6 +233,7 @@ function setListeners() {
     // 编辑页面
     addClickListener("content-page-nav-new-article", writeNewArticle);
     addClickListener("content-page-nav-all-article", showAllArticles);
+    addClickListener("content-page-nav-all-draft", showAllDrafts);
     addClickListener("content-page-nav-logout", adminLogout);
     addClickListener("article-publish", publishArticle);
 }
@@ -327,11 +328,46 @@ function setEditorContainerVisibility(isVisible) {
         contentPage.style.display = "none";
     }
 }
+
 function showAllArticles() {
     clearListContainer();
     net.getData(consts.URL_ARTICLE_LIST_ALL).then((data) => {
         if (data.code == 0) {
-            util.toast("请求成功");
+            util.toast("所有文章列表请求成功");
+            let articleListContainerElement =
+                document.getElementById("content-page-list");
+            for (let i = 0; i < data.data.length; i++) {
+                let dataItem = data.data[i];
+                let createDateStr = util.secondTimeToDateStr(
+                    dataItem.create_date
+                );
+                let updateDateStr = util.secondTimeToDateStr(
+                    dataItem.update_date
+                );
+                let hint = createDateStr;
+                if (dataItem.create_date != dataItem.update_date) {
+                    hint = createDateStr + "  " + updateDateStr;
+                }
+                let itemContainerEle = createOneArticleListItemContainerEle(
+                    "article-brief-info-container-id-" + i,
+                    dataItem.title,
+                    hint,
+                    dataItem.unique_identifier
+                );
+                articleListContainerElement.appendChild(itemContainerEle);
+            }
+        } else {
+            util.toast(data.message);
+        }
+        console.log(data);
+    });
+}
+
+function showAllDrafts() {
+    clearListContainer();
+    net.getData(consts.URL_ARTICLE_LIST_ALL_DRAFT).then((data) => {
+        if (data.code == 0) {
+            util.toast("草稿列表请求成功");
             let articleListContainerElement =
                 document.getElementById("content-page-list");
             for (let i = 0; i < data.data.length; i++) {
