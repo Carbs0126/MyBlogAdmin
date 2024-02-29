@@ -5,6 +5,11 @@ import keys from "./keys.js";
 import consts from "./consts.js";
 
 const TOKEN = "token";
+const EDITOR_MODE_ADD = 0;
+const EDITOR_MODE_UPDATE = 1;
+let ArticleChanged = false;
+let EnableQuillEditorTextChangedListener = false;
+let EditorMode = EDITOR_MODE_ADD;
 
 function updateUrlPath(path) {
     window.history.replaceState(null, "", path);
@@ -127,9 +132,14 @@ function showQuillEditor() {
                 toolbar: toolbarOptions,
             },
             theme: "snow",
-            placeholder: "Article Content...",
             readOnly: false,
         });
+        quillEditor.on("text-change", quillEditorTextChange);
+    }
+}
+function quillEditorTextChange(delta, oldDelta, source) {
+    if (EnableQuillEditorTextChangedListener) {
+        ArticleChanged = true;
     }
 }
 
@@ -183,16 +193,31 @@ function showLoginPage() {
 
 function publishArticle() {
     let articleHtmlContent = quillEditor.root.innerHTML;
+    articleHtmlContent = articleHtmlContent.replace(
+        /<select class="ql-ui".*?>.*?<\/select>/gi,
+        ""
+    );
+    var delta = quillEditor.getContents();
+    var deltaJSON = JSON.stringify(delta);
+    // console.log("delta:", delta);
+    // console.log("type of delta:", typeof delta);
+    // quillEditor.root.innerHTML = "";
+    // setTimeout(function () {
+    // console.log("before set Content");
+    // quillEditor.setContents(delta);
+    // }, 2000);
 
     net.postData(consts.URL_PUBLISH_ARTICLE, {
         token: util.getCookie(TOKEN),
         article_title: document.getElementById("article-title-input").value,
         article_content: articleHtmlContent,
+        article_content_quill: deltaJSON,
         article_comment: document.getElementById("article-comment-input").value,
         author_id: "1",
     }).then((data) => {
         if (data.code == 0) {
             util.toast("文章发布成功");
+            ArticleChanged = false;
         } else {
             util.toast(data.message);
         }
@@ -205,11 +230,25 @@ function setListeners() {
     addClickListener("login-button", adminLogin);
     addClickListener("login-password-toggle-div", togglePasswordVisibility);
     // 编辑页面
-    addClickListener("content-page-nav-new-article", showEditorContainer);
+    addClickListener("content-page-nav-new-article", writeNewArticle);
     addClickListener("content-page-nav-all-article", showAllArticles);
     addClickListener("content-page-nav-logout", adminLogout);
     addClickListener("article-publish", publishArticle);
 }
+
+function setInputListeners() {
+    document
+        .getElementById("article-title-input")
+        .addEventListener("input", function (event) {
+            ArticleChanged = true;
+        });
+    document
+        .getElementById("article-comment-input")
+        .addEventListener("input", function (event) {
+            ArticleChanged = true;
+        });
+}
+
 function togglePasswordVisibility() {
     let inputPassword = document.getElementById("login-input-password");
     if (inputPassword.type === "password") {
@@ -221,6 +260,60 @@ function togglePasswordVisibility() {
 function adminLogout() {
     util.clearCookie(TOKEN);
     showLoginPage();
+}
+
+function showComfirmDialog(finishFunc) {
+    Swal.fire({
+        title:
+            EditorMode == EDITOR_MODE_ADD
+                ? "当前处于【新增】模式，发现有内容已经修改暂未保存，是否需要上传当前新文章？"
+                : "当前处于【修改】模式，发现有内容已经修改暂未保存，是否需要保存当前文章？",
+        showDenyButton: true,
+        showCancelButton: true,
+        confirmButtonText: "是",
+        denyButtonText: "否",
+    }).then((result) => {
+        if (result.isConfirmed) {
+            if (EditorMode == EDITOR_MODE_ADD) {
+                // 上传当前文章
+                util.toast("开始上传当前新文章");
+                // TODO
+                // finishFunc()
+            } else if (EditorMode == EDITOR_MODE_UPDATE) {
+                // 上传当前文章
+                util.toast("开始更新当前文章");
+                // TODO
+            }
+            // Swal.fire("Saved!", "", "success");
+        } else if (result.isDenied) {
+            // Swal.fire("Changes are not saved", "", "info");
+        }
+    });
+}
+
+function writeNewArticle() {
+    showEditorContainer();
+    if (ArticleChanged) {
+        showComfirmDialog(null);
+    } else {
+        clearArticleInputs();
+        clearQuillEditor();
+        updateBillboard("新增模式");
+        EditorMode = EDITOR_MODE_ADD;
+    }
+}
+function clearArticleInputs() {
+    document.getElementById("article-title-input").value = "";
+    document.getElementById("article-identifier-input").value = "";
+    document.getElementById("article-comment-input").value = "";
+}
+function updateBillboard(text) {
+    document.getElementById(
+        "article-info-container-right-billboard"
+    ).textContent = text;
+}
+function clearQuillEditor() {
+    quillEditor.root.innerHTML = "";
 }
 function showEditorContainer() {
     setEditorContainerVisibility(true);
@@ -294,8 +387,12 @@ function createOneArticleListItemContainerEle(containerID, title, hint, path) {
     itemElementContainer.appendChild(itemElementTitle);
     itemElementContainer.appendChild(itemElementHint);
     itemElementContainer.addEventListener("click", function () {
-        requestArticleDetailAndShowContent(path);
-        updateArticleItemForSelectedAndUnselectedTheme(this);
+        if (ArticleChanged) {
+            showComfirmDialog(null);
+        } else {
+            requestArticleDetailAndShowContent(path);
+            updateArticleItemForSelectedAndUnselectedTheme(this);
+        }
     });
     itemElementContainer.setAttribute("article-path", path);
     return itemElementContainer;
@@ -326,13 +423,15 @@ function updateArticleItemForSelectedAndUnselectedTheme(selectedElement) {
 function requestArticleDetailAndShowContent(articleIdentifier) {
     net.getData(consts.URL_ARTICLE_DETAIL + articleIdentifier).then((data) => {
         if (data.code == 0) {
+            EditorMode = EDITOR_MODE_UPDATE;
             showEditorContainer();
             showArticleContentPanel(
                 data.data.title,
-                data.data.content,
+                data.data.quill_content,
                 articleIdentifier,
                 data.data.update_date
             );
+            updateBillboard("更新模式");
         } else {
             util.toast(data.message);
         }
@@ -341,11 +440,22 @@ function requestArticleDetailAndShowContent(articleIdentifier) {
 }
 
 // todo  comment
-function showArticleContentPanel(title, content, articleIdentifier, comment) {
+function showArticleContentPanel(
+    title,
+    quillContent,
+    articleIdentifier,
+    comment
+) {
     document.getElementById("article-title-input").value = title;
     document.getElementById("article-identifier-input").value =
         articleIdentifier;
-    quillEditor.clipboard.dangerouslyPasteHTML(content);
+    // quillEditor.clipboard.dangerouslyPasteHTML(content);
+    let restoredDelta = JSON.parse(quillContent);
+    EnableQuillEditorTextChangedListener = false;
+    console.log("before set contents");
+    quillEditor.setContents(restoredDelta);
+    console.log("after set contents");
+    EnableQuillEditorTextChangedListener = true;
 }
 
 function addClickListener(elementID, onClickFunc) {
@@ -355,6 +465,7 @@ function addClickListener(elementID, onClickFunc) {
 (function () {
     window.onload = function () {
         setListeners();
+        setInputListeners();
         checkToken().then(
             function (result) {
                 showContentPage();
