@@ -219,6 +219,7 @@ function publishArticle() {
         if (data.code == 0) {
             util.toast("文章发布成功");
             ArticleChanged = false;
+            clearContentViews();
         } else {
             util.toast(data.message);
         }
@@ -289,6 +290,7 @@ function showComfirmDialog(finishFunc) {
             // Swal.fire("Saved!", "", "success");
         } else if (result.isDenied) {
             // Swal.fire("Changes are not saved", "", "info");
+            finishFunc();
         }
     });
 }
@@ -296,14 +298,21 @@ function showComfirmDialog(finishFunc) {
 function writeNewArticle() {
     showEditorContainer();
     if (ArticleChanged) {
-        showComfirmDialog(null);
+        showComfirmDialog(clearContentViews);
     } else {
-        clearArticleInputs();
-        clearQuillEditor();
-        updateBillboard("新增模式");
-        EditorMode = EDITOR_MODE_ADD;
+        clearContentViews();
+        ArticleChanged = false;
     }
 }
+
+function clearContentViews() {
+    updateArticleItemForSelectedAndUnselectedTheme(null);
+    clearArticleInputs();
+    clearQuillEditor();
+    updateBillboard("新增模式");
+    EditorMode = EDITOR_MODE_ADD;
+}
+
 function clearArticleInputs() {
     document.getElementById("article-title-input").value = "";
     document.getElementById("article-identifier-input").value = "";
@@ -336,6 +345,7 @@ function showAllArticles() {
             util.toast("所有文章列表请求成功");
             let articleListContainerElement =
                 document.getElementById("content-page-list");
+            articleListContainerElement.style.display = "block";
             for (let i = 0; i < data.data.length; i++) {
                 let dataItem = data.data[i];
                 let createDateStr = util.secondTimeToDateStr(
@@ -370,6 +380,7 @@ function showAllDrafts() {
             util.toast("草稿列表请求成功");
             let articleListContainerElement =
                 document.getElementById("content-page-list");
+            articleListContainerElement.style.display = "block";
             for (let i = 0; i < data.data.length; i++) {
                 let dataItem = data.data[i];
                 let createDateStr = util.secondTimeToDateStr(
@@ -424,11 +435,15 @@ function createOneArticleListItemContainerEle(containerID, title, hint, path) {
     itemElementContainer.appendChild(itemElementTitle);
     itemElementContainer.appendChild(itemElementHint);
     itemElementContainer.addEventListener("click", function () {
+        let that = this;
         if (ArticleChanged) {
-            showComfirmDialog(null);
+            showComfirmDialog(function () {
+                requestArticleDetailAndShowContent(path);
+                updateArticleItemForSelectedAndUnselectedTheme(that);
+            });
         } else {
             requestArticleDetailAndShowContent(path);
-            updateArticleItemForSelectedAndUnselectedTheme(this);
+            updateArticleItemForSelectedAndUnselectedTheme(that);
         }
     });
     itemElementContainer.setAttribute("article-path", path);
@@ -466,7 +481,8 @@ function requestArticleDetailAndShowContent(articleIdentifier) {
                 data.data.title,
                 data.data.quill_content,
                 articleIdentifier,
-                data.data.update_date
+                data.data.update_date,
+                data.data.comment
             );
             updateBillboard("更新模式");
         } else {
@@ -481,11 +497,14 @@ function showArticleContentPanel(
     title,
     quillContent,
     articleIdentifier,
+    updateDate,
     comment
 ) {
+    console.log("comment ======>" + comment);
     document.getElementById("article-title-input").value = title;
     document.getElementById("article-identifier-input").value =
         articleIdentifier;
+    document.getElementById("article-comment-input").value = comment;
     // quillEditor.clipboard.dangerouslyPasteHTML(content);
     let restoredDelta = JSON.parse(quillContent);
     EnableQuillEditorTextChangedListener = false;
