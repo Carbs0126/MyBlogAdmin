@@ -207,24 +207,50 @@ function publishArticle() {
     // console.log("before set Content");
     // quillEditor.setContents(delta);
     // }, 2000);
-
-    net.postData(consts.URL_PUBLISH_ARTICLE, {
-        token: util.getCookie(TOKEN),
-        article_title: document.getElementById("article-title-input").value,
-        article_content: articleHtmlContent,
-        article_content_quill: deltaJSON,
-        article_comment: document.getElementById("article-comment-input").value,
-        author_id: "1",
-    }).then((data) => {
-        if (data.code == 0) {
-            util.toast("文章发布成功");
-            ArticleChanged = false;
-            clearContentViews();
-        } else {
-            util.toast(data.message);
-        }
-        console.log(data);
-    });
+    if (EditorMode == EDITOR_MODE_ADD) {
+        net.postData(consts.URL_PUBLISH_ARTICLE, {
+            token: util.getCookie(TOKEN),
+            article_title: document.getElementById("article-title-input").value,
+            article_content: articleHtmlContent,
+            article_content_quill: deltaJSON,
+            article_comment: document.getElementById("article-comment-input")
+                .value,
+            article_state: 0,
+            author_id: "1",
+        }).then((data) => {
+            if (data.code == 0) {
+                util.toast("文章发布成功");
+                ArticleChanged = false;
+                clearContentViews();
+            } else {
+                util.toast(data.message);
+            }
+            console.log(data);
+        });
+    } else if (EditorMode == EDITOR_MODE_UPDATE) {
+        net.postData(consts.URL_UPDATE_ARTICLE, {
+            token: util.getCookie(TOKEN),
+            article_title: document.getElementById("article-title-input").value,
+            article_content: articleHtmlContent,
+            article_content_quill: deltaJSON,
+            article_comment: document.getElementById("article-comment-input")
+                .value,
+            article_state: 0,
+            unique_identifier: document.getElementById(
+                "article-identifier-input"
+            ).value,
+            author_id: "1",
+        }).then((data) => {
+            if (data.code == 0) {
+                util.toast("文章发布成功");
+                ArticleChanged = false;
+                clearContentViews();
+            } else {
+                util.toast(data.message);
+            }
+            console.log(data);
+        });
+    }
 }
 
 function setListeners() {
